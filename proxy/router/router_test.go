@@ -20,8 +20,8 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/flike/kingshard/config"
-	"github.com/flike/kingshard/sqlparser"
+	"github.com/dollarkillerx/narwhal/config"
+	"github.com/dollarkillerx/narwhal/sqlparser"
 )
 
 func TestParseRule(t *testing.T) {

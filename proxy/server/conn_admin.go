@@ -23,11 +23,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/flike/kingshard/core/errors"
-	"github.com/flike/kingshard/core/golog"
-	"github.com/flike/kingshard/core/hack"
-	"github.com/flike/kingshard/mysql"
-	"github.com/flike/kingshard/sqlparser"
+	"github.com/dollarkillerx/narwhal/core/errors"
+	"github.com/dollarkillerx/narwhal/core/golog"
+	"github.com/dollarkillerx/narwhal/core/hack"
+	"github.com/dollarkillerx/narwhal/mysql"
+	"github.com/dollarkillerx/narwhal/sqlparser"
 )
 
 const (
@@ -463,8 +463,8 @@ func (c *ClientConn) handleShowNodeConfig() (*mysql.Resultset, error) {
 	//var nodeRows [][]string
 	for name, node := range c.schema.nodes {
 		//"master"
-		idleConns,cacheConns,pushConnCount,popConnCount := node.Master.ConnCount()
-		
+		idleConns, cacheConns, pushConnCount, popConnCount := node.Master.ConnCount()
+
 		rows = append(
 			rows,
 			[]string{
@@ -482,7 +482,7 @@ func (c *ClientConn) handleShowNodeConfig() (*mysql.Resultset, error) {
 		//"slave"
 		for _, slave := range node.Slave {
 			if slave != nil {
-				idleConns,cacheConns,pushConnCount,popConnCount := slave.ConnCount()
+				idleConns, cacheConns, pushConnCount, popConnCount := slave.ConnCount()
 
 				rows = append(
 					rows,

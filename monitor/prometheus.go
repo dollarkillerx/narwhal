@@ -20,8 +20,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/flike/kingshard/core/golog"
-	"github.com/flike/kingshard/proxy/server"
+	"github.com/dollarkillerx/narwhal/core/golog"
+	"github.com/dollarkillerx/narwhal/proxy/server"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

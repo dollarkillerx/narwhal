@@ -21,10 +21,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/flike/kingshard/core/errors"
-	"github.com/flike/kingshard/core/golog"
-	"github.com/flike/kingshard/mysql"
-	"github.com/flike/kingshard/sqlparser"
+	"github.com/dollarkillerx/narwhal/core/errors"
+	"github.com/dollarkillerx/narwhal/core/golog"
+	"github.com/dollarkillerx/narwhal/mysql"
+	"github.com/dollarkillerx/narwhal/sqlparser"
 )
 
 var paramFieldData []byte

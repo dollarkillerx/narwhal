@@ -2,7 +2,7 @@
 
 # kingshard简介
 
-kingshard是一个由Go开发高性能MySQL Proxy项目，kingshard在满足基本的读写分离的功能上，致力于简化MySQL分库分表操作；能够让DBA通过kingshard轻松平滑地实现MySQL数据库扩容。 **kingshard的性能是直连MySQL性能的80%以上**。线上使用kingshard，**请从[release页面](https://github.com/flike/kingshard/releases)获取最新版！！**
+kingshard是一个由Go开发高性能MySQL Proxy项目，kingshard在满足基本的读写分离的功能上，致力于简化MySQL分库分表操作；能够让DBA通过kingshard轻松平滑地实现MySQL数据库扩容。 **kingshard的性能是直连MySQL性能的80%以上**。线上使用kingshard，**请从[release页面](https://github.com/dollarkillerx/narwhal/releases)获取最新版！！**
 
 ## 主要功能：
 
@@ -76,11 +76,11 @@ kingshard是一个由Go开发高性能MySQL Proxy项目，kingshard在满足基�
 ## 鸣谢
 - 感谢[mixer](https://github.com/siddontang/mixer)作者siddontang, kingshard最初的版本正是基于mixer开发而来的。
 - 感谢[bigpyer](https://github.com/bigpyer)，他对kingshard做了详细的性能测试，并撰写了一份非常详细的测试报告。
-- 感谢以下[开源爱好者](https://github.com/flike/kingshard/graphs/contributors)为kingshard做出的贡献。
+- 感谢以下[开源爱好者](https://github.com/dollarkillerx/narwhal/graphs/contributors)为kingshard做出的贡献。
 
 ## kingshard用户列表
 
-https://github.com/flike/kingshard/issues/148
+https://github.com/dollarkillerx/narwhal/issues/148
 
 ## 反馈
 kingshard开源以来，经过不断地迭代开发，功能较为完善，稳定性有较大提升。 **目前已有超过50家公司在生产环境使用kingshard作为MySQL代理。** 如果您在使用kingshard的过程中发现BUG或者有新的功能需求，请发邮件至flikechen#qq.com与作者取得联系，或者加入QQ群(147926796)交流。

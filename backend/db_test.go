@@ -1,7 +1,7 @@
 package backend
 
 import (
-	. "github.com/flike/kingshard/backend"
+	. "github.com/dollarkillerx/narwhal/backend"
 
 	"testing"
 )

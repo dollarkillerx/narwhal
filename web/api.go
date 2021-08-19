@@ -22,8 +22,8 @@ import (
 	"strings"
 	"time"
 
-	ksError "github.com/flike/kingshard/core/errors"
-	"github.com/flike/kingshard/core/golog"
+	ksError "github.com/dollarkillerx/narwhal/core/errors"
+	"github.com/dollarkillerx/narwhal/core/golog"
 	"github.com/labstack/echo"
 )
 
@@ -69,16 +69,16 @@ func (s *ApiServer) DelAllowIps(c echo.Context) error {
 }
 
 type DBStatus struct {
-	Node      		string `json:"node"`
-	Address   		string `json:"address"`
-	Type      		string `json:"type"`
-	Status    		string `json:"status"`
-	LastPing  		string `json:"laste_ping"`
-	MaxConn   		int    `json:"max_conn"`
-	IdleConn  		int    `json:"idle_conn"`
-	CacheConn 		int    `json:"cache_conn"`
-	PushConnCount  	int64  `json:"push_conn_count"`
-	PopConnCount   	int64  `json:"pop_conn_count"`
+	Node          string `json:"node"`
+	Address       string `json:"address"`
+	Type          string `json:"type"`
+	Status        string `json:"status"`
+	LastPing      string `json:"laste_ping"`
+	MaxConn       int    `json:"max_conn"`
+	IdleConn      int    `json:"idle_conn"`
+	CacheConn     int    `json:"cache_conn"`
+	PushConnCount int64  `json:"push_conn_count"`
+	PopConnCount  int64  `json:"pop_conn_count"`
 }
 
 //get nodes status
@@ -90,7 +90,7 @@ func (s *ApiServer) GetNodesStatus(c echo.Context) error {
 
 	for nodeName, node := range nodes {
 		//get master counter
-		idleConns,cacheConns,pushConnCount,popConnCount := node.Master.ConnCount()
+		idleConns, cacheConns, pushConnCount, popConnCount := node.Master.ConnCount()
 
 		//get master status
 		masterStatus.Node = nodeName
@@ -108,7 +108,7 @@ func (s *ApiServer) GetNodesStatus(c echo.Context) error {
 		//get slaves status
 		for _, slave := range node.Slave {
 			//get slave counter
-			idleConns,cacheConns,pushConnCount,popConnCount := slave.ConnCount()
+			idleConns, cacheConns, pushConnCount, popConnCount := slave.ConnCount()
 
 			slaveStatus.Node = nodeName
 			slaveStatus.Address = slave.Addr()
@@ -253,7 +253,7 @@ type ShardConfig struct {
 
 func (s *ApiServer) GetProxySchema(c echo.Context) error {
 	shardConfig := make([]ShardConfig, 0, 10)
-	for _, schema := range s.cfg.SchemaList{
+	for _, schema := range s.cfg.SchemaList {
 		//append default rule
 		shardConfig = append(shardConfig,
 			ShardConfig{
@@ -264,7 +264,7 @@ func (s *ApiServer) GetProxySchema(c echo.Context) error {
 		for _, r := range schema.ShardRule {
 			shardConfig = append(shardConfig,
 				ShardConfig{
-					User:		   schema.User,
+					User:          schema.User,
 					DB:            r.DB,
 					Table:         r.Table,
 					Key:           r.Key,

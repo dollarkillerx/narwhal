@@ -21,13 +21,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/flike/kingshard/backend"
-	"github.com/flike/kingshard/core/errors"
-	"github.com/flike/kingshard/core/golog"
-	"github.com/flike/kingshard/core/hack"
-	"github.com/flike/kingshard/mysql"
-	"github.com/flike/kingshard/proxy/router"
-	"github.com/flike/kingshard/sqlparser"
+	"github.com/dollarkillerx/narwhal/backend"
+	"github.com/dollarkillerx/narwhal/core/errors"
+	"github.com/dollarkillerx/narwhal/core/golog"
+	"github.com/dollarkillerx/narwhal/core/hack"
+	"github.com/dollarkillerx/narwhal/mysql"
+	"github.com/dollarkillerx/narwhal/proxy/router"
+	"github.com/dollarkillerx/narwhal/sqlparser"
 )
 
 /*处理query语句*/

@@ -26,13 +26,13 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/flike/kingshard/mysql"
+	"github.com/dollarkillerx/narwhal/mysql"
 
-	"github.com/flike/kingshard/backend"
-	"github.com/flike/kingshard/config"
-	"github.com/flike/kingshard/core/errors"
-	"github.com/flike/kingshard/core/golog"
-	"github.com/flike/kingshard/proxy/router"
+	"github.com/dollarkillerx/narwhal/backend"
+	"github.com/dollarkillerx/narwhal/config"
+	"github.com/dollarkillerx/narwhal/core/errors"
+	"github.com/dollarkillerx/narwhal/core/golog"
+	"github.com/dollarkillerx/narwhal/proxy/router"
 	"sync"
 )
 
@@ -842,35 +842,35 @@ func (s *Server) UpdateConfig(newCfg *config.Config) {
 	s.configVer += 1
 }
 
-func (s *Server) GetMonitorData() map[string]map[string]string{
+func (s *Server) GetMonitorData() map[string]map[string]string {
 	data := make(map[string]map[string]string)
 
 	// get all node's monitor data
 	for _, node := range s.nodes {
 		//get master monitor data
 		dbData := make(map[string]string)
-		idleConns,cacheConns,pushConnCount,popConnCount := node.Master.ConnCount()
+		idleConns, cacheConns, pushConnCount, popConnCount := node.Master.ConnCount()
 
-		dbData["idleConn"] 		= strconv.Itoa(idleConns)
-		dbData["cacheConns"] 	= strconv.Itoa(cacheConns)
+		dbData["idleConn"] = strconv.Itoa(idleConns)
+		dbData["cacheConns"] = strconv.Itoa(cacheConns)
 		dbData["pushConnCount"] = strconv.FormatInt(pushConnCount, 10)
-		dbData["popConnCount"] 	= strconv.FormatInt(popConnCount, 10)
-		dbData["maxConn"]	= fmt.Sprintf("%d", node.Cfg.MaxConnNum)
-		dbData["type"] 		= "master"
+		dbData["popConnCount"] = strconv.FormatInt(popConnCount, 10)
+		dbData["maxConn"] = fmt.Sprintf("%d", node.Cfg.MaxConnNum)
+		dbData["type"] = "master"
 
 		data[node.Master.Addr()] = dbData
 
 		//get all slave monitor data
 		for _, slaveNode := range node.Slave {
 			slaveDbData := make(map[string]string)
-			idleConns,cacheConns,pushConnCount,popConnCount := slaveNode.ConnCount()
-			
-			slaveDbData["idleConn"] 		= strconv.Itoa(idleConns)
-			slaveDbData["cacheConns"] 		= strconv.Itoa(cacheConns)
-			slaveDbData["pushConnCount"] 	= strconv.FormatInt(pushConnCount, 10)
-			slaveDbData["popConnCount"] 	= strconv.FormatInt(popConnCount, 10)
-			slaveDbData["maxConn"]	= fmt.Sprintf("%d", node.Cfg.MaxConnNum)
-			slaveDbData["type"] 	= "slave"
+			idleConns, cacheConns, pushConnCount, popConnCount := slaveNode.ConnCount()
+
+			slaveDbData["idleConn"] = strconv.Itoa(idleConns)
+			slaveDbData["cacheConns"] = strconv.Itoa(cacheConns)
+			slaveDbData["pushConnCount"] = strconv.FormatInt(pushConnCount, 10)
+			slaveDbData["popConnCount"] = strconv.FormatInt(popConnCount, 10)
+			slaveDbData["maxConn"] = fmt.Sprintf("%d", node.Cfg.MaxConnNum)
+			slaveDbData["type"] = "slave"
 
 			data[slaveNode.Addr()] = slaveDbData
 		}
