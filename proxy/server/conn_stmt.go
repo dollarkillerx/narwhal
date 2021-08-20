@@ -39,20 +39,20 @@ func init() {
 }
 
 type Stmt struct {
-	id uint32
+	Id uint32
 
-	params  int
-	columns int
+	Params  int
+	Columns int
 
-	args []interface{}
+	Args []interface{}
 
-	s sqlparser.Statement
+	S sqlparser.Statement
 
-	sql string
+	Sql string
 }
 
 func (s *Stmt) ResetParams() {
-	s.args = make([]interface{}, s.params)
+	s.Args = make([]interface{}, s.Params)
 }
 
 func (c *ClientConn) handleStmtPrepare(sql string) error {
@@ -65,12 +65,12 @@ func (c *ClientConn) handleStmtPrepare(sql string) error {
 	sql = strings.TrimRight(sql, ";")
 
 	var err error
-	s.s, err = sqlparser.Parse(sql)
+	s.S, err = sqlparser.Parse(sql)
 	if err != nil {
 		return fmt.Errorf(`parse sql "%s" error`, sql)
 	}
 
-	s.sql = sql
+	s.Sql = sql
 
 	defaultRule := c.schema.rule.DefaultRule
 
@@ -93,10 +93,10 @@ func (c *ClientConn) handleStmtPrepare(sql string) error {
 	if err != nil {
 		return fmt.Errorf("prepare error %s", err)
 	}
-	s.params = t.ParamNum()
-	s.columns = t.ColumnNum()
+	s.Params = t.ParamNum()
+	s.Columns = t.ColumnNum()
 
-	s.id = c.stmtId
+	s.Id = c.stmtId
 	c.stmtId++
 
 	if err = c.writePrepare(s); err != nil {
@@ -104,7 +104,7 @@ func (c *ClientConn) handleStmtPrepare(sql string) error {
 	}
 
 	s.ResetParams()
-	c.stmts[s.id] = s
+	c.stmts[s.Id] = s
 
 	err = co.ClosePrepare(t.GetId())
 	if err != nil {
@@ -121,11 +121,11 @@ func (c *ClientConn) writePrepare(s *Stmt) error {
 	//status ok
 	data = append(data, 0)
 	//stmt id
-	data = append(data, mysql.Uint32ToBytes(s.id)...)
+	data = append(data, mysql.Uint32ToBytes(s.Id)...)
 	//number columns
-	data = append(data, mysql.Uint16ToBytes(uint16(s.columns))...)
+	data = append(data, mysql.Uint16ToBytes(uint16(s.Columns))...)
 	//number params
-	data = append(data, mysql.Uint16ToBytes(uint16(s.params))...)
+	data = append(data, mysql.Uint16ToBytes(uint16(s.Params))...)
 	//filter [00]
 	data = append(data, 0)
 	//warning count
@@ -136,8 +136,8 @@ func (c *ClientConn) writePrepare(s *Stmt) error {
 		return err
 	}
 
-	if s.params > 0 {
-		for i := 0; i < s.params; i++ {
+	if s.Params > 0 {
+		for i := 0; i < s.Params; i++ {
 			data = data[0:4]
 			data = append(data, []byte(paramFieldData)...)
 
@@ -153,8 +153,8 @@ func (c *ClientConn) writePrepare(s *Stmt) error {
 		}
 	}
 
-	if s.columns > 0 {
-		for i := 0; i < s.columns; i++ {
+	if s.Columns > 0 {
+		for i := 0; i < s.Columns; i++ {
 			data = data[0:4]
 			data = append(data, []byte(columnFieldData)...)
 
@@ -207,10 +207,10 @@ func (c *ClientConn) handleStmtExecute(data []byte) error {
 	var paramTypes []byte
 	var paramValues []byte
 
-	paramNum := s.params
+	paramNum := s.Params
 
 	if paramNum > 0 {
-		nullBitmapLen := (s.params + 7) >> 3
+		nullBitmapLen := (s.Params + 7) >> 3
 		if len(data) < (pos + nullBitmapLen + 1) {
 			return mysql.ErrMalformPacket
 		}
@@ -237,17 +237,17 @@ func (c *ClientConn) handleStmtExecute(data []byte) error {
 
 	var err error
 
-	switch stmt := s.s.(type) {
+	switch stmt := s.S.(type) {
 	case *sqlparser.Select:
-		err = c.handlePrepareSelect(stmt, s.sql, s.args)
+		err = c.handlePrepareSelect(stmt, s.Sql, s.Args)
 	case *sqlparser.Insert:
-		err = c.handlePrepareExec(s.s, s.sql, s.args)
+		err = c.handlePrepareExec(s.S, s.Sql, s.Args)
 	case *sqlparser.Update:
-		err = c.handlePrepareExec(s.s, s.sql, s.args)
+		err = c.handlePrepareExec(s.S, s.Sql, s.Args)
 	case *sqlparser.Delete:
-		err = c.handlePrepareExec(s.s, s.sql, s.args)
+		err = c.handlePrepareExec(s.S, s.Sql, s.Args)
 	case *sqlparser.Replace:
-		err = c.handlePrepareExec(s.s, s.sql, s.args)
+		err = c.handlePrepareExec(s.S, s.Sql, s.Args)
 	default:
 		err = fmt.Errorf("command %T not supported now", stmt)
 	}
@@ -332,7 +332,7 @@ func (c *ClientConn) handlePrepareExec(stmt sqlparser.Statement, sql string, arg
 }
 
 func (c *ClientConn) bindStmtArgs(s *Stmt, nullBitmap, paramTypes, paramValues []byte) error {
-	args := s.args
+	args := s.Args
 
 	pos := 0
 
@@ -341,7 +341,7 @@ func (c *ClientConn) bindStmtArgs(s *Stmt, nullBitmap, paramTypes, paramValues [
 	var isNull bool
 	var err error
 
-	for i := 0; i < s.params; i++ {
+	for i := 0; i < s.Params; i++ {
 		if nullBitmap[i>>3]&(1<<(uint(i)%8)) > 0 {
 			args[i] = nil
 			continue
@@ -470,18 +470,18 @@ func (c *ClientConn) handleStmtSendLongData(data []byte) error {
 	}
 
 	paramId := binary.LittleEndian.Uint16(data[4:6])
-	if paramId >= uint16(s.params) {
+	if paramId >= uint16(s.Params) {
 		return mysql.NewDefaultError(mysql.ER_WRONG_ARGUMENTS, "stmt_send_longdata")
 	}
 
-	if s.args[paramId] == nil {
-		s.args[paramId] = data[6:]
+	if s.Args[paramId] == nil {
+		s.Args[paramId] = data[6:]
 	} else {
-		if b, ok := s.args[paramId].([]byte); ok {
+		if b, ok := s.Args[paramId].([]byte); ok {
 			b = append(b, data[6:]...)
-			s.args[paramId] = b
+			s.Args[paramId] = b
 		} else {
-			return fmt.Errorf("invalid param long data type %T", s.args[paramId])
+			return fmt.Errorf("invalid param long data type %T", s.Args[paramId])
 		}
 	}
 

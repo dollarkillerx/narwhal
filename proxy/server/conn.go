@@ -273,6 +273,7 @@ func (c *ClientConn) clean() {
 	}
 }
 
+// client conn 核心
 func (c *ClientConn) Run() {
 	defer func() {
 		r := recover()
@@ -330,6 +331,7 @@ func (c *ClientConn) Run() {
 	}
 }
 
+// 具体sql 处理
 func (c *ClientConn) dispatch(data []byte) error {
 	c.proxy.counter.IncrClientQPS()
 	cmd := data[0]
